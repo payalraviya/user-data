@@ -80,6 +80,31 @@ const sortTable = (col) => {
   }
 }
 
+const flattenLocation = (location) => {
+  return `${location.street.number}, ${location.street.name}, ${location.street.name}, ${location.city}, ${location.state}, ${location.country}, ${location.postcode}, ${location.coordinates.latitude}, ${location.coordinates.longitude}`
+}
+
+const flattenName = (name) => {
+  return `${name.title} ${name.first} ${name.last}`
+}
+
+const flattenedUsers = computed(() => {
+  return users.value.map(user => {
+    const flattenedUser = {};
+
+    flattenedUser.name = flattenName(user.name); 
+    flattenedUser.DOB = user.dob.date; 
+    flattenedUser.email = user.email;
+    
+    flattenedUser.location = flattenLocation(user.location);
+
+    flattenedUser.phone = user.phone;
+    flattenedUser.picture = user.picture.thumbnail;
+
+    return flattenedUser;
+  });
+});
+
 const columns = computed(() => {
   if (users.value.length === 0) {
     return []
@@ -118,19 +143,16 @@ const columns = computed(() => {
         </th>
         <th>Picture</th>
       </tr>
-      <tr v-for="(user, index) in users" :key="index">
+      <tr v-for="(user, index) in flattenedUsers" :key="index">
         <td>{{ index + 1 }}</td>
-        <td>{{ user.name.first }} {{ user.name.last }}</td>
-        <td>{{ user.dob.date }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.DOB }}</td>
         <td>{{ user.email }}</td>
         <td>
-          {{ user.location.street.number }}, {{ user.location.street.name }},
-          {{ user.location.city }}, {{ user.location.state }}, {{ user.location.country }},
-          {{ user.location.postcode }}, {{ user.location.coordinates.latitude }},
-          {{ user.location.coordinates.longitude }}
+          {{ user.location }}
         </td>
         <td>{{ user.phone }}</td>
-        <td><img :src="user.picture.thumbnail" :alt="user.name.first" /></td>
+        <td><img :src="user.picture" :alt="user.name" /></td>
       </tr>
     </table>
   </div>
