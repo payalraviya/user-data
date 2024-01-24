@@ -38,10 +38,7 @@ onMounted(() => {
   <div>
     <table>
       <tr>
-        <th @click="sortTable('slno')">
-          slno
-          <div class="arrow" v-bind:class="ascending ? 'arrow_up' : 'arrow_down'"></div>
-        </th>
+        <th>slno</th>
         <th @click="sortTable('name')">
           name
           <div class="arrow" v-bind:class="ascending ? 'arrow_up' : 'arrow_down'"></div>
